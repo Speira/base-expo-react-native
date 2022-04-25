@@ -35,5 +35,5 @@ Card.defaultProps = {
 }
 Card.propTypes = {
   title: PropTypes.string,
-  url: '',
+  url: PropTypes.string,
 }

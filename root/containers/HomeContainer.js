@@ -87,7 +87,7 @@ function HomeContainer() {
       <RequestWrapper isLoading={state.isLoading} errors={state.errors}>
         <CardWrapper title={LABELS.LIST}>
           {state.cards.map((item) => (
-            <Card key={item.id} title={item.title} />
+            <Card key={item.id} title={item.title} url={item.url} />
           ))}
         </CardWrapper>
       </RequestWrapper>
