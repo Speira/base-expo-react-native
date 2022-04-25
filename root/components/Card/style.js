@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { View, Text } from 'react-native'
+import { ImageBackground, View, Text } from 'react-native'
 
 /**
  * CardHeader
@@ -20,6 +20,16 @@ export const CardBody = styled(View)`
   flex: 4;
   padding: 4px;
   justify-content: center;
+`
+
+/**
+ * CardBodyImage
+ * @component
+ *
+ */
+export const CardBodyImage = styled(ImageBackground)`
+  flex: 1;
+  justify-ontent: center;
 `
 /**
  * CardFooter

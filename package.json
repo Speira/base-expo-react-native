@@ -43,7 +43,7 @@
   "jest": {
     "preset": "react-native"
   },
-  "proxy": "http://10.0.2.2:16001",
+  "proxy": "http://localhost:16001",
   "version": "1.0.0",
   "private": true,
   "name": "listitem",

@@ -2,7 +2,13 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/native'
 import { View, Text } from 'react-native'
 
-import BaseCard, { CardHeader, CardBody, CardText, CardFooter } from './style'
+import BaseCard, {
+  CardBody,
+  CardBodyImage,
+  CardFooter,
+  CardHeader,
+  CardText,
+} from './style'
 
 /**
  * Card
@@ -10,20 +16,24 @@ import BaseCard, { CardHeader, CardBody, CardText, CardFooter } from './style'
  *
  */
 export default function Card(props) {
-  const { title, ...restProps } = props
+  const { title, url, ...restProps } = props
   return (
     <BaseCard {...restProps}>
       <CardHeader>
         <CardText>{title}</CardText>
       </CardHeader>
-      <CardBody />
+      <CardBody>
+        <CardBodyImage source={url} resizeMode="cover" />
+      </CardBody>
       <CardFooter />
     </BaseCard>
   )
 }
 Card.defaultProps = {
   title: '',
+  url: '',
 }
 Card.propTypes = {
   title: PropTypes.string,
+  url: '',
 }
