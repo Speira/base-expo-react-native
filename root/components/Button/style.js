@@ -26,7 +26,7 @@ export const ButtonWiew = styled(View)`
  */
 const BaseButton = styled(TouchableOpacity)`
   align-items: center;
-  background-color: ${({ theme }) => theme.COLORS.DYNAMIC.WARNING};
+  background-color: ${({ theme, status }) => theme.COLORS.DYNAMIC[status]};
   padding: 10px;
 `
 export default BaseButton

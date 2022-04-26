@@ -1,8 +1,16 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { shallow } from 'enzyme'
+import constants from '~utils/constants'
 import Card from './index'
 
-test('render Card', () => {
-  const tree = renderer.create(<Card title="test" />).toJSON()
-  expect(tree).toMatchSnapshot()
+const { THEMES } = constants
+
+describe('render Card', () => {
+  const wrapper = shallow(<Card title="test" theme={THEMES.DEFAULT} />)
+  it('Card should be defined', () => {
+    expect(wrapper).toBeDefined()
+  })
+  it('Card should match snapshot', () => {
+    expect(wrapper).toMatchSnapshot()
+  })
 })

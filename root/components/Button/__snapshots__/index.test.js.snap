@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render Button Button should match snapshot 1`] = `
+<style__ButtonWiew>
+  <style__BaseButton
+    onPress={[Function]}
+    status="INFO"
+  >
+    <style__ButtonText>
+      test
+    </style__ButtonText>
+  </style__BaseButton>
+</style__ButtonWiew>
+`;

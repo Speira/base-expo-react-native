@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { withProxy, withParams } from '~utils/functions'
 import constants from '~utils/constants'
 
@@ -15,9 +16,9 @@ const APIContext = React.createContext()
  *     - isAPIRequesting {Boolean}
  *     - fetchAPICards
  *         params {Object} options
- *         params {String} options.proxy
- *         params {Object} options.params
- *         params {Number} options.timeout
+ *         params {Boolean} options.withCorsProxy | set a proxy
+ *         params {Object} options.params | send request with params
+ *         params {Number} options.timeout | timeout before cancel
  *         @return {Promise}
  *
  */
@@ -28,21 +29,27 @@ function APIProvider(props) {
     let uri = API.FETCH_DATA_URL
     let timeoutId = null
     const fetchOptions = []
-    if (options.proxy) uri = withProxy(options.proxy)(uri)
+    if (options.withCorsProxy)
+      fetchOptions.proxy = { host: API.PROXY.NO_CORS_SERVER }
     if (options.params) uri = withParams(options.params)(uri)
     if (options.timeout) {
       const controller = new AbortController()
       timeoutId = setTimeout(() => controller.abort(), options.timeout)
       fetchOptions.signal = controller.signal
     }
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
-        const response = await fetch(uri, fetchOptions)
-        if (timeoutId) clearTimeout(timeoutId)
-        if (!response.ok) {
-          return reject(new Error(LABELS.SEARCH_DATA_FAILED))
-        }
-        resolve(await response.json())
+        axios
+          .get(uri, fetchOptions)
+          .then((response) => {
+            if (!(response.data && response.data.length)) {
+              return reject(new Error(LABELS.SEARCH_DATA_FAILED))
+            }
+            resolve(response.data)
+          })
+          .catch((err) => {
+            reject(err)
+          })
       } catch (err) {
         reject(err)
       }

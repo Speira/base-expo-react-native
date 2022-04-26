@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render Card Card should match snapshot 1`] = `
+<style__BaseCard
+  theme={
+    Object {
+      "COLORS": Object {
+        "DYNAMIC": Object {
+          "DANGER": "#A9333A",
+          "INFO": "#035397",
+          "SUCCESS": "#1C7947",
+          "WARNING": "#C36A2D",
+        },
+        "STATIC": Object {
+          "DARK": "#4d3e30",
+          "LIGHT": "#f8f8fa",
+          "PRIMARY": "#EBD8C3",
+          "QUATERNARY": "#FFEEEE",
+          "SECONDARY": "#F7E9D7",
+          "TERTIARY": "#FFF6EA",
+        },
+      },
+    }
+  }
+>
+  <style__CardHeader>
+    <style__CardText>
+      test
+    </style__CardText>
+  </style__CardHeader>
+  <style__CardBody>
+    <style__CardBodyImage
+      resizeMode="cover"
+      source={
+        Object {
+          "uri": "",
+        }
+      }
+    />
+  </style__CardBody>
+  <style__CardFooter />
+</style__BaseCard>
+`;

@@ -3,36 +3,18 @@ import React from 'react'
 import { useStorage } from '~contexts/StorageContext'
 import { useAPI } from '~contexts/APIContext'
 import constants from '~utils/constants'
+import { checkScrollEnd } from '~utils/functions'
+import { useCardsInfos } from '~hooks'
 
 import Button from '~components/Button'
-import Layout from '~components/Layout'
 import Card from '~components/Card'
 import CardWrapper from '~components/CardWrapper'
+import Layout from '~components/Layout'
 import RequestWrapper from '~components/RequestWrapper'
+import WebPage from '~components/WebPage'
 
-const { LABELS, API, STATES } = constants
-
-/**
- * homeReducer
- * @reducer
- *
- */
-const homeReducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_SUCCESS':
-      return { ...state, cards: action.cards, isLoading: false, errors: [] }
-    case 'FETCH_ERROR':
-      return {
-        ...state,
-        errors: [...state.errors, action.error],
-        isLoading: false,
-      }
-    case 'START_LOADING':
-      return { ...state, isLoading: true }
-    default:
-      return state
-  }
-}
+const { API, LABELS, STATES, STATUS } = constants
+const { WARNING } = STATUS
 
 /**
  * HomeContainer
@@ -41,57 +23,61 @@ const homeReducer = (state, action) => {
  *
  */
 function HomeContainer() {
-  const {
-    clearStorageCards,
-    fetchStorageCards,
-    hasDatabase,
-    insertStorageCards,
-  } = useStorage()
+  const { fetchStorageCards, hasDatabase, insertStorageCards } = useStorage()
   const { fetchAPICards } = useAPI()
-  const [state, dispatch] = React.useReducer(homeReducer, {
-    cards: [],
-    isLoading: false,
-    errors: [],
-  })
+  const { cards, areCardsLoadable, cardsErrors, setCardsInfos } =
+    useCardsInfos()
+  const [isLoading, setLoadingState] = React.useState(true)
 
-  const setSuccess = (cards) => {
-    dispatch({ type: 'FETCH_SUCCESS', cards })
-  }
-
-  const setFailure = (error) => {
-    dispatch({ type: 'FETCH_ERROR', error })
-  }
   const syncData = async () => {
-    dispatch({ type: 'START_LOADING' })
     try {
-      const found = await fetchStorageCards()
-      if (found && found.length) return setSuccess(found)
-      const fetched = await fetchAPICards({ proxy: API.PROXY })
+      const found = await fetchStorageCards({ start: cards.length })
+      if (found && found.length) return setCardsInfos({ cards: found })
+      const fetched = await fetchAPICards({ withCorsProxy: true })
       const inserted = await insertStorageCards(fetched)
-      if (inserted.length) return setSuccess(inserted)
-      setFailure(new Error(LABELS.NO_RESPONSE_DATA))
+      if (inserted.length) return setCardsInfos({ cards: inserted })
+      setCardsInfos({ error: new Error(LABELS.NO_RESPONSE_DATA) })
     } catch (err) {
-      setFailure(err)
+      setCardsInfos({ error: err })
     }
   }
+
+  const onEndScroll = async ({ nativeEvent }) => {
+    const isScrollEnd = checkScrollEnd(nativeEvent)
+    if (!isScrollEnd) return null
+    const found = await fetchStorageCards({ start: cards.length })
+    if (found.length) {
+      setCardsInfos({ cards: found })
+    }
+  }
+
+  const needProxyCheck = cardsErrors.some(
+    (e) => e.message === LABELS.SEARCH_DATA_FAILED,
+  )
 
   React.useEffect(() => {
     if (hasDatabase) syncData()
-    else {
-      dispatch({ type: 'START_LOADING' })
-    }
   }, [hasDatabase])
+
+  React.useEffect(() => {
+    if (areCardsLoadable || cardsErrors.length) setLoadingState(false)
+  }, [areCardsLoadable, cardsErrors.length])
 
   return (
     <Layout title={LABELS.WELCOME}>
-      <RequestWrapper isLoading={state.isLoading} errors={state.errors}>
-        <CardWrapper title={LABELS.LIST}>
-          {state.cards.map((item) => (
+      <RequestWrapper isLoading={isLoading} errors={cardsErrors}>
+        <CardWrapper title={LABELS.LIST} onScroll={onEndScroll}>
+          {cards.map((item) => (
             <Card key={item.id} title={item.title} url={item.url} />
           ))}
         </CardWrapper>
       </RequestWrapper>
-      <Button label={LABELS.CLEAR_DATABASE} onPress={clearStorageCards} />
+      <WebPage hide={!needProxyCheck} uri={API.PROXY.NO_CORS_SERVER} />
+      <Button
+        label={LABELS.REFETCH_DATA}
+        onPress={syncData}
+        hide={!needProxyCheck}
+      />
     </Layout>
   )
 }

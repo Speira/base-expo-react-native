@@ -29,7 +29,7 @@ export const CardBody = styled(View)`
  */
 export const CardBodyImage = styled(ImageBackground)`
   flex: 1;
-  justify-ontent: center;
+  justify-content: center;
 `
 /**
  * CardFooter
@@ -65,6 +65,6 @@ const BaseCard = styled(View)`
   shadow-offset: {width: 1, height: 2};
   shadow-opacity: 0.6;
   shadow-radius: 4px;
-  margin: 8px 16px;
+  margin: 8px;
 `
 export default BaseCard

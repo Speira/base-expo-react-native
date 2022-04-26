@@ -8,12 +8,12 @@ import BaseCardWrapper, { CardWrapperTitle, CardWrapperContent } from './style'
  *
  */
 export default function CardWrapper(props) {
-  const { children, title } = props
+  const { children, onScroll, title, ...restProps } = props
 
   return (
-    <BaseCardWrapper>
+    <BaseCardWrapper {...restProps}>
       <CardWrapperTitle>{title}</CardWrapperTitle>
-      <CardWrapperContent>{children}</CardWrapperContent>
+      <CardWrapperContent onScroll={onScroll}>{children}</CardWrapperContent>
     </BaseCardWrapper>
   )
 }
@@ -21,8 +21,10 @@ export default function CardWrapper(props) {
 CardWrapper.defaultProps = {
   children: undefined,
   title: '',
+  onScroll: () => null,
 }
 CardWrapper.propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
+  onScroll: PropTypes.func,
 }

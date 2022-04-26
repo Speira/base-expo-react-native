@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render CardWrapper CardWrapper should match snapshot 1`] = `
+<style__BaseCardWrapper>
+  <style__CardWrapperTitle>
+    test
+  </style__CardWrapperTitle>
+  <style__CardWrapperContent
+    onScroll={[MockFunction]}
+  >
+    test
+  </style__CardWrapperContent>
+</style__BaseCardWrapper>
+`;

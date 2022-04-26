@@ -23,7 +23,11 @@ export default function Card(props) {
         <CardText>{title}</CardText>
       </CardHeader>
       <CardBody>
-        <CardBodyImage source={url} resizeMode="cover" />
+        <CardBodyImage
+          resizeMode="cover"
+          source={{ uri: url }}
+          resizeMode="cover"
+        />
       </CardBody>
       <CardFooter />
     </BaseCard>

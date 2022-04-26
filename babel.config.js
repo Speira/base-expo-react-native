@@ -12,6 +12,7 @@ module.exports = function (api) {
             '~contexts': './root/contexts',
             '~components': './root/components',
             '~containers': './root/containers',
+            '~hooks': './root/hooks',
             '~utils': './root/utils',
           },
         },

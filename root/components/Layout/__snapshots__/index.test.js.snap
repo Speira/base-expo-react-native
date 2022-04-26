@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render Layout Layout should match snapshot 1`] = `
+<style__BaseLayout>
+  <style__LayoutStatusBar />
+  <style__LayoutHeader>
+    <style__LayoutTitle>
+      test
+    </style__LayoutTitle>
+  </style__LayoutHeader>
+  <style__LayoutBody>
+    test
+  </style__LayoutBody>
+  <style__LayoutFooter />
+</style__BaseLayout>
+`;
